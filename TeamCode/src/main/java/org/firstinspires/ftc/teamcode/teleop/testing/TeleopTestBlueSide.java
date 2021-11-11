@@ -34,6 +34,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -138,7 +139,7 @@ public class TeleopTestBlueSide extends LinearOpMode {
             telemetry.update();
 
             while (angles.firstAngle < 0 && opModeIsActive()) {
-                ControlConfig.update(gamepad1, gamepad2);
+
 
                 telemetry.update();
                 move();
@@ -149,7 +150,7 @@ public class TeleopTestBlueSide extends LinearOpMode {
             }
 
             while (angles.firstAngle >= 0 && opModeIsActive()) {
-                ControlConfig.update(gamepad1, gamepad2);
+
 
                 telemetry.update();
                 move();
@@ -223,6 +224,7 @@ public class TeleopTestBlueSide extends LinearOpMode {
     public void peripheralMove(){
         ControlConfig.update(gamepad1, gamepad2);
         // Dumping servo
+        // FIXME make it so that we cannot dump when at lowest level
         if (ControlConfig.dumpServo) {
             robot.dumpServo.setPosition(Constants.dumpPosition);
         } else if (ControlConfig.collectServo) {
@@ -242,7 +244,6 @@ public class TeleopTestBlueSide extends LinearOpMode {
         if (ControlConfig.liftBucket) {
             robot.liftMotor.setPower(1.0);
         } else if (ControlConfig.lowerBucket) {
-            // FIXME this doesn't set dumpservo to the collect position
             robot.dumpServo.setPosition(Constants.collectPosition);
             robot.liftMotor.setPower(-1.0);
         } else {
@@ -250,6 +251,7 @@ public class TeleopTestBlueSide extends LinearOpMode {
         }
 
         // Collection motor
+        // TODO add slowmode to this
         if (ControlConfig.collectWheel) {
             robot.collectionMotor.setPower(1.0);
         } else if (ControlConfig.unCollectWheel) {

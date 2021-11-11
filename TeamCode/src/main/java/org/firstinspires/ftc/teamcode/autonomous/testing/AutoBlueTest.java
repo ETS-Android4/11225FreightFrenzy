@@ -53,8 +53,7 @@ public class AutoBlueTest extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
+//        if (isStopRequested()) return;
         generator.executeTrajectoryList(compiled1);
 
         sleep(500);
