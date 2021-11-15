@@ -200,13 +200,13 @@ public class TeleopTestBlueSide extends LinearOpMode {
 
         // Handle speed control
         if (ControlConfig.fast){
-            powerMultiplier = 1;
+            powerMultiplier = Constants.fastMultiplier;
             telemetry.addLine("fast");
         } else if (ControlConfig.slow) {
-            powerMultiplier = 0.3;
+            powerMultiplier = Constants.slowMultiplier;
             telemetry.addLine("slow");
         } else {
-            powerMultiplier = 0.5;
+            powerMultiplier = Constants.normalMultiplier;
             telemetry.addLine("normal");
         }
 

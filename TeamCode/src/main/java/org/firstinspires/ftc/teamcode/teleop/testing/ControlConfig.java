@@ -46,12 +46,12 @@ public final class ControlConfig {
         left = -pad1.left_stick_x;
         clockwise = pad1.right_stick_x;
 
-        fast = pad1.right_trigger > .1;
-        slow = pad1.left_trigger > .1;
+        fast = pad1.left_bumper;
+        slow = pad1.right_bumper;
 
         // Update peripheral controls
-        collectWheel = pad1.right_bumper;
-        unCollectWheel = pad1.left_bumper;
+        collectWheel = pad1.left_trigger > .1;
+        unCollectWheel = pad1.right_trigger > .1;
 
         liftBucket = pad2.dpad_up;
         lowerBucket = pad2.dpad_down;

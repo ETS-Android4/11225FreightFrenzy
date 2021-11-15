@@ -37,8 +37,6 @@ public class AutoBlueTest extends AutoMethods {
         drive = robot.drive;
         generator = robot.generator;
 
-        int NEW_target;
-
         Vector2d vector = new Vector2d(-40.75, 61.5);
         Pose2d startPose = new Pose2d(vector, Math.toRadians(270));
 
