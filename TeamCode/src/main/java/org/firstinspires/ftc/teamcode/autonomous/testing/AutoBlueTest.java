@@ -5,6 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.PathType;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -20,16 +24,20 @@ import java.util.ArrayList;
  */
 //@Disabled
 @Autonomous(group = "drive")
-public class AutoBlueTest extends LinearOpMode {
+public class AutoBlueTest extends AutoMethods {
     Hardware22 robot;
     SampleMecanumDrive drive;
     TrajectoryGenerator generator;
+
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Hardware22(hardwareMap);
         drive = robot.drive;
         generator = robot.generator;
+
+        int NEW_target;
 
         Vector2d vector = new Vector2d(-40.75, 61.5);
         Pose2d startPose = new Pose2d(vector, Math.toRadians(270));
