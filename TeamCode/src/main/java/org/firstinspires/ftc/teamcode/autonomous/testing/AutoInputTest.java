@@ -91,13 +91,31 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.addLine("Delay confirmed, " + delay);
         telemetry.update();
 
+        ArrayList<ArrayList<Trajectory>> trajs;
+        TrajectoryGenerator gen;
+        if (color == Color.RED) {
+            gen = new RedTrajectoryGenerator(drive, position);
+            trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
+        } else {
+            gen = new BlueTrajectoryGenerator(drive, position);
+            trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
+        }
+
+
         waitForStart();
 
         telemetry.addData("Color", color);
         telemetry.addData("Position", position);
         telemetry.addData("Delay", delay);
         telemetry.update();
-        sleep(10000);
+        sleep(2000);
 
+        gen.executeTrajectoryList(trajs.get(0));
+        // TODO execute detection
+        gen.executeTrajectoryList(trajs.get(1));
+        // TODO dump at correct height
+        gen.executeTrajectoryList(trajs.get(2));
+        // TODO deliver duck
+        gen.executeTrajectoryList(trajs.get(3));
     }
 }
