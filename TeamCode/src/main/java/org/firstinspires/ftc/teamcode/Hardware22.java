@@ -157,8 +157,17 @@ public class Hardware22 {
         } catch (Exception ignored) {
         }
 
-        drive = new SampleMecanumDrive(hardwareMap);
-        generator = new TrajectoryGenerator(drive);
+        try {
+            drive = new SampleMecanumDrive(hardwareMap);
+        } catch (Exception ignored) {
+        }
+
+        try {
+            generator = new TrajectoryGenerator(drive);
+        } catch (Exception ignored) {
+        }
+
+
 
 //        frontLeft = hwMap.dcMotor.get("front_left");
 //        frontRight = hwMap.dcMotor.get("front_right");
