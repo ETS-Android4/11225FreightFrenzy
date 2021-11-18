@@ -71,21 +71,22 @@ public class AutoInputTest extends LinearOpMode {
         sleep(500);
 
         // Delay
-
-        boolean buttonUnpressed = true;
         while (true) {
             telemetry.addData("Delay? RB to add 10 ms, LB to add 100ms, y done", delay);
             telemetry.update();
-            if (gamepad2.right_bumper && buttonUnpressed) {
+            if (gamepad2.right_bumper) {
                 delay += 10;
-                buttonUnpressed = false;
+                // Delay until right bumper is no longer pressed
+                while (gamepad2.right_bumper) {}
+                continue;
             } else if (gamepad2.left_bumper && buttonUnpressed) {
+                // Delay until left bumper is no longer pressed
+                while (gamepad2.left_bumper) {}
+                continue;
                 delay += 100;
                 buttonUnpressed = false;
             } else if (gamepad2.y) {
                 break;
-            } else if (!gamepad2.right_bumper && !gamepad2.left_bumper) {
-                buttonUnpressed = true;
             }
         }
         telemetry.addLine("Delay confirmed, " + delay);
