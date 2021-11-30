@@ -111,10 +111,16 @@ public class AutoInputTest extends LinearOpMode {
         sleep(delay);
 
         // TODO execute detection
+        telemetry.addLine("Traj 1");
+        telemetry.update();
         gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
+        telemetry.addLine("Traj 2");
+        telemetry.update();
         // TODO dump at correct height
         gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
         // TODO deliver duck
+        telemetry.addLine("Traj 3");
+        telemetry.update();
         gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
     }
 }

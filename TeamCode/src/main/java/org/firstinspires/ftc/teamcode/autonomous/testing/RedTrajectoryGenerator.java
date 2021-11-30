@@ -40,12 +40,14 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
             generateTrajectoryListItem(-30, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
 
             // Duck wheel
-            generateTrajectoryListItem(-22, -36.5, PathType.LINE_TO_CONSTANT, trajectory2);
+            generateTrajectoryListItem(-22, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
             // Approaching to duck wheel
-            generateTrajectoryListItem(-60, -56.25, 0, PathType.LINE_TO_LINEAR, trajectory2);
+            generateTrajectoryListItem(-55, -56.25, 120, PathType.LINE_TO_LINEAR, trajectory2);
 
             // Move to parking
-            generateTrajectoryListItem(-60, -(56.25 + 1.7), 0, PathType.LINE_TO_LINEAR, trajectory3);
+
+            generateTrajectoryListItem(-50, -(56.25 + 12), 0, PathType.LINE_TO_LINEAR, trajectory3);
+            generateTrajectoryListItem(60, -(56.25 + 15), 0, PathType.LINE_TO_LINEAR, trajectory3);
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
             ArrayList<Trajectory> compTraj2 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
