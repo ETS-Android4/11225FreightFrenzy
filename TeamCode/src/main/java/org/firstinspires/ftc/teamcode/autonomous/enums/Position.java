@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous.enums;
 
 public enum Position {
-    RIGHT("right"),
-    LEFT("left")
+    FRONT("front"),
+    BACK("back")
     ;
 
     private final String text;

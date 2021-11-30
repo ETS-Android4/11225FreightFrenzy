@@ -53,15 +53,15 @@ public class AutoInputTest extends LinearOpMode {
 
         // Position
 
-        telemetry.addLine("Position? right or left, dpad left v right");
+        telemetry.addLine("Position? front or back, dpad up v down");
         telemetry.update();
 
         while (true) {
-            if (gamepad2.dpad_left) {
-                position = Position.LEFT;
+            if (gamepad2.dpad_up) {
+                position = Position.FRONT;
                 break;
-            } else if (gamepad2.dpad_right) {
-                position = Position.RIGHT;
+            } else if (gamepad2.dpad_down) {
+                position = Position.BACK;
                 break;
             }
         }
@@ -108,14 +108,13 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.addData("Position", position);
         telemetry.addData("Delay", delay);
         telemetry.update();
-        sleep(2000);
+        sleep(delay);
 
-        gen.executeTrajectoryList(trajs.get(0));
         // TODO execute detection
-        gen.executeTrajectoryList(trajs.get(1));
+        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
         // TODO dump at correct height
-        gen.executeTrajectoryList(trajs.get(2));
+        gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
         // TODO deliver duck
-        gen.executeTrajectoryList(trajs.get(3));
+        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
     }
 }
