@@ -118,6 +118,7 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
         // TODO dump at correct height
         gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
+        sleep(2000);
         // TODO deliver duck
         telemetry.addLine("Traj 3");
         telemetry.update();

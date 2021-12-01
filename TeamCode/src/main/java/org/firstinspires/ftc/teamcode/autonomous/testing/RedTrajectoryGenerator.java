@@ -30,24 +30,42 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
         ArrayList<ArrayList<Trajectory>> finalTrajs = new ArrayList<>();
 
         if (position == Position.BACK) {
-            return null;
+            Vector2d vector = new Vector2d(7.75, -61.5);
+            Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
+
+            drive.setPoseEstimate(startPose);
+
+            generateTrajectoryListItem(-7, -42, 105, PathType.LINE_TO_LINEAR, trajectory1);
+            // moving to the shipping hub
+
+
+            ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
+
+            finalTrajs.add(compTraj1);
+
+
         } else if (position == Position.FRONT) {
             Vector2d vector = new Vector2d(-40.75, -61.5);
             Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
 
             drive.setPoseEstimate(startPose);
 
+
             generateTrajectoryListItem(-30, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
-
-            // Duck wheel
+            // moving to the shipping hub
             generateTrajectoryListItem(-22, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
-            // Approaching to duck wheel
-            generateTrajectoryListItem(-55, -56.25, 120, PathType.LINE_TO_LINEAR, trajectory2);
+            // getting in position to dump
 
-            // Move to parking
+            generateTrajectoryListItem(-60, -57, 120, PathType.LINE_TO_LINEAR, trajectory2);
+            // moving to the duck wheel
+            generateTrajectoryListItem(-62, -59, 90, PathType.LINE_TO_LINEAR, trajectory2);
+            //nudging up to the duck wheel
 
-            generateTrajectoryListItem(-50, -(56.25 + 12), 0, PathType.LINE_TO_LINEAR, trajectory3);
-            generateTrajectoryListItem(60, -(56.25 + 15), 0, PathType.LINE_TO_LINEAR, trajectory3);
+            generateTrajectoryListItem(-50, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+            // getting in position to cross the field and park
+            generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+            // hugging the wall and moving into the warehouse
+
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
             ArrayList<Trajectory> compTraj2 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
