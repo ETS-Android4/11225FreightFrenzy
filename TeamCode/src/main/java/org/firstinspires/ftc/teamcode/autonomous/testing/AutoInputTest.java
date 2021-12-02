@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.PathType;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 

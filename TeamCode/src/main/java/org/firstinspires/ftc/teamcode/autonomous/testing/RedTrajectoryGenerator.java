@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+import org.firstinspires.ftc.teamcode.autonomous.PathType;
 import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
