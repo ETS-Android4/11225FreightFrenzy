@@ -57,14 +57,18 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
 
             generateTrajectoryListItem(-60, -57, 120, PathType.LINE_TO_LINEAR, trajectory2);
             // moving to the duck wheel
-            generateTrajectoryListItem(-62, -59, 90, PathType.LINE_TO_LINEAR, trajectory2);
+            generateTrajectoryListItem(-63, -60, 90, PathType.LINE_TO_LINEAR, trajectory2);
             //nudging up to the duck wheel
-
-            generateTrajectoryListItem(-50, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
-            // getting in position to cross the field and park
-            generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
-            // hugging the wall and moving into the warehouse
-
+            if (parkingMethod == ParkingMethod.WALL) {
+                generateTrajectoryListItem(-50, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // getting in position to cross the field and park
+                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // hugging the wall and moving into the warehouse
+            } else if (parkingMethod == ParkingMethod.BARRIER) {
+                generateTrajectoryListItem(7, -42, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // getting in position to cross the field and park
+                generateTrajectoryListItem(50, -40, 0, PathType.LINE_TO_LINEAR, trajectory3);
+            }
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
             ArrayList<Trajectory> compTraj2 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
@@ -73,7 +77,6 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
             finalTrajs.add(compTraj1);
             finalTrajs.add(compTraj2);
             finalTrajs.add(compTraj3);
-
         }
         return finalTrajs;
     }

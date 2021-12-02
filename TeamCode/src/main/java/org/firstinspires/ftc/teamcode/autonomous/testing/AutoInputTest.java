@@ -13,8 +13,10 @@ import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
 import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.teleop.testing.ControlConfig;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /*
  * This is an example of a more complex path to really test the tuning.
@@ -122,8 +124,9 @@ public class AutoInputTest extends LinearOpMode {
             trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
         }
 
-
+        long startTime = System.nanoTime();
         waitForStart();
+
 
         telemetry.addData("Color", color);
         telemetry.addData("Position", position);
@@ -140,12 +143,22 @@ public class AutoInputTest extends LinearOpMode {
         // TODO dump at correct height
         if (position == Position.FRONT) {
             gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
             // TODO deliver duck
+            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
+            sleep(2000);
+            robot.towerMotor.setPower(0);
         }
 
         telemetry.addLine("Traj 3");
         telemetry.update();
         gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        long durationSeconds = duration / (1*(1__0^(1_0-1))); // Future proof this number
+
+        telemetry.addData("Time Elapsed:", durationSeconds);
+        telemetry.update();
+        sleep(2000);
     }
 }
