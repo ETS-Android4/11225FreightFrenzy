@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.autonomous.enums;
 
-public enum Position {
-    FRONT("front"),
-    BACK("back")
+public enum ParkingMethod {
+    WALL("wall"),
+    BARRIER("barrier")
     ;
 
     private final String text;
 
-    Position(final String text) {
+    ParkingMethod(final String text) {
         this.text = text;
     }
 

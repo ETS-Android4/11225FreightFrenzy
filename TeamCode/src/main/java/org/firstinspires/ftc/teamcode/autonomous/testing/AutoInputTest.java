@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.PathType;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
@@ -27,6 +28,7 @@ public class AutoInputTest extends LinearOpMode {
 
     Color color;
     Position position;
+    ParkingMethod parkingMethod;
     long delay = 0;
 
     @Override
@@ -53,15 +55,15 @@ public class AutoInputTest extends LinearOpMode {
 
         // Position
 
-        telemetry.addLine("Position? right or left, dpad left v right");
+        telemetry.addLine("Position? front or back, dpad up v down");
         telemetry.update();
 
         while (true) {
-            if (gamepad2.dpad_left) {
-                position = Position.LEFT;
+            if (gamepad2.dpad_up) {
+                position = Position.FRONT;
                 break;
-            } else if (gamepad2.dpad_right) {
-                position = Position.RIGHT;
+            } else if (gamepad2.dpad_down) {
+                position = Position.BACK;
                 break;
             }
         }
@@ -70,23 +72,41 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
         sleep(500);
 
+        // Parking method
+
+        telemetry.addLine("Parking method? wall or barrier, dpad right v left");
+        telemetry.update();
+
+        while (true) {
+            if (gamepad2.dpad_left) {
+                parkingMethod = ParkingMethod.BARRIER;
+                break;
+            } else if (gamepad2.dpad_right) {
+                parkingMethod = ParkingMethod.WALL;
+                break;
+            }
+        }
+
+        telemetry.addLine("Parking method confirmed, " + parkingMethod);
+        telemetry.update();
+        sleep(500);
+
         // Delay
+
+        boolean buttonUnpressed = true;
         while (true) {
             telemetry.addData("Delay? RB to add 10 ms, LB to add 100ms, y done", delay);
             telemetry.update();
-            if (gamepad2.right_bumper) {
+            if (gamepad2.right_bumper && buttonUnpressed) {
                 delay += 10;
-                // Delay until right bumper is no longer pressed
-                while (gamepad2.right_bumper) {}
-                continue;
+                buttonUnpressed = false;
             } else if (gamepad2.left_bumper && buttonUnpressed) {
-                // Delay until left bumper is no longer pressed
-                while (gamepad2.left_bumper) {}
-                continue;
                 delay += 100;
                 buttonUnpressed = false;
             } else if (gamepad2.y) {
                 break;
+            } else if (!gamepad2.right_bumper && !gamepad2.left_bumper) {
+                buttonUnpressed = true;
             }
         }
         telemetry.addLine("Delay confirmed, " + delay);
@@ -95,10 +115,10 @@ public class AutoInputTest extends LinearOpMode {
         ArrayList<ArrayList<Trajectory>> trajs;
         TrajectoryGenerator gen;
         if (color == Color.RED) {
-            gen = new RedTrajectoryGenerator(drive, position);
+            gen = new RedTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
         } else {
-            gen = new BlueTrajectoryGenerator(drive, position);
+            gen = new BlueTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
         }
 
@@ -109,14 +129,23 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.addData("Position", position);
         telemetry.addData("Delay", delay);
         telemetry.update();
-        sleep(2000);
+        sleep(delay);
 
-        gen.executeTrajectoryList(trajs.get(0));
         // TODO execute detection
-        gen.executeTrajectoryList(trajs.get(1));
+        telemetry.addLine("Traj 1");
+        telemetry.update();
+        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
+        telemetry.addLine("Traj 2");
+        telemetry.update();
         // TODO dump at correct height
-        gen.executeTrajectoryList(trajs.get(2));
-        // TODO deliver duck
-        gen.executeTrajectoryList(trajs.get(3));
+        if (position == Position.FRONT) {
+            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
+            sleep(2000);
+            // TODO deliver duck
+        }
+
+        telemetry.addLine("Traj 3");
+        telemetry.update();
+        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
     }
 }
