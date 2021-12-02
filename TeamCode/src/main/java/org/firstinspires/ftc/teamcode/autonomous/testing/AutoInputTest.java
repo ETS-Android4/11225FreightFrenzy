@@ -27,6 +27,7 @@ public class AutoInputTest extends LinearOpMode {
 
     Color color;
     Position position;
+    ParkingMethod parkingMethod;
     long delay = 0;
 
     @Override
@@ -70,6 +71,25 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
         sleep(500);
 
+        // Parking method
+
+        telemetry.addLine("Parking method? wall or barrier, dpad right v left");
+        telemetry.update();
+
+        while (true) {
+            if (gamepad2.dpad_left) {
+                parkingMethod = ParkingMethod.BARRIER;
+                break;
+            } else if (gamepad2.dpad_right) {
+                parkingMethod = ParkingMethod.WALL;
+                break;
+            }
+        }
+
+        telemetry.addLine("Parking method confirmed, " + parkingMethod);
+        telemetry.update();
+        sleep(500);
+
         // Delay
 
         boolean buttonUnpressed = true;
@@ -94,10 +114,10 @@ public class AutoInputTest extends LinearOpMode {
         ArrayList<ArrayList<Trajectory>> trajs;
         TrajectoryGenerator gen;
         if (color == Color.RED) {
-            gen = new RedTrajectoryGenerator(drive, position);
+            gen = new RedTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
         } else {
-            gen = new BlueTrajectoryGenerator(drive, position);
+            gen = new BlueTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
         }
 
@@ -117,9 +137,12 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.addLine("Traj 2");
         telemetry.update();
         // TODO dump at correct height
-        gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-        sleep(2000);
-        // TODO deliver duck
+        if (position == Position.FRONT) {
+            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
+            sleep(2000);
+            // TODO deliver duck
+        }
+
         telemetry.addLine("Traj 3");
         telemetry.update();
         gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse

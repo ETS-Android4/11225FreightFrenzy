@@ -4,23 +4,21 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
-import org.firstinspires.ftc.teamcode.Hardware22;
-import org.firstinspires.ftc.teamcode.autonomous.PathType;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
 
 public class RedTrajectoryGenerator extends TrajectoryGenerator {
-    SampleMecanumDrive drive;
     Position position;
-    TrajectoryGenerator generator;
-    public RedTrajectoryGenerator(SampleMecanumDrive drive, Position position) {
+    ParkingMethod parkingMethod;
+
+    public RedTrajectoryGenerator(SampleMecanumDrive drive, Position position, ParkingMethod parkingMethod) {
         super(drive);
         this.position = position;
-        this.drive = drive;
+        this.parkingMethod = parkingMethod;
     }
-
 
     public ArrayList<ArrayList<Trajectory>> generateTrajectories() {
         ArrayList<Double[]> trajectory1 = new ArrayList<>();
