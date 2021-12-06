@@ -29,22 +29,36 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
         ArrayList<ArrayList<Trajectory>> finalTrajs = new ArrayList<>();
 
         if (position == Position.BACK) {
-            Vector2d vector = new Vector2d(7.75, -61.5);
+            Vector2d vector = new Vector2d(8.0, -61.5);
             Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
 
             drive.setPoseEstimate(startPose);
-
-            generateTrajectoryListItem(-7, -42, 105, PathType.LINE_TO_LINEAR, trajectory1);
             // moving to the shipping hub
 
+            generateTrajectoryListItem(-7, -42, 105, PathType.LINE_TO_LINEAR, trajectory1);
+            if (parkingMethod == ParkingMethod.WALL) {
+                generateTrajectoryListItem(0, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // getting in position to cross the field and park
+                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // hugging the wall and moving into the warehouse
+            } else if (parkingMethod == ParkingMethod.BARRIER) {
+                generateTrajectoryListItem(7, -42, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // getting in position to cross the field and park
+                generateTrajectoryListItem(50, -40, 0, PathType.LINE_TO_LINEAR, trajectory3);
+            }
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
+            ArrayList<Trajectory> compTraj2 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
+            ArrayList<Trajectory> compTraj3 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
+
 
             finalTrajs.add(compTraj1);
+            finalTrajs.add(compTraj2);
+            finalTrajs.add(compTraj3);
 
 
         } else if (position == Position.FRONT) {
-            Vector2d vector = new Vector2d(-40.75, -61.5);
+            Vector2d vector = new Vector2d(-38.625, -61.5);
             Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
 
             drive.setPoseEstimate(startPose);
