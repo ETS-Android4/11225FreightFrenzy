@@ -48,8 +48,8 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
             }
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
-            ArrayList<Trajectory> compTraj2 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
-            ArrayList<Trajectory> compTraj3 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory2);
+            ArrayList<Trajectory> compTraj2 = new ArrayList<>();
+            ArrayList<Trajectory> compTraj3 = compileTrajectoryList(compTraj1.get(compTraj1.size() - 1).end(), trajectory3);
 
 
             finalTrajs.add(compTraj1);

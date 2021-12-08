@@ -136,6 +136,7 @@ public class AutoInputTest extends LinearOpMode {
 
         // TODO execute detection
         telemetry.addLine("Traj 1");
+        telemetry.addData("traj length", trajs.size());
         telemetry.update();
         gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
         telemetry.addLine("Traj 2");
