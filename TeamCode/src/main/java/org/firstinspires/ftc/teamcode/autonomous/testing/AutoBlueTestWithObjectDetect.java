@@ -5,16 +5,11 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.PathType;
-import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
-import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
-import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.vision.DuckDetectorSimplified;
 import org.opencv.core.Core;
@@ -28,18 +23,16 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 /*
  * This is an example of a more complex path to really test the tuning.
  */
 //@Disabled
 @Autonomous(group = "drive")
-public class AutoInputTest extends LinearOpMode {
+public class AutoBlueTestWithObjectDetect extends LinearOpMode {
     Hardware22 robot;
     SampleMecanumDrive drive;
     TrajectoryGenerator generator;
-    private ElapsedTime runtime = new ElapsedTime();
     OpenCvCamera webcam;
 
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
@@ -55,20 +48,14 @@ public class AutoInputTest extends LinearOpMode {
 
     private static float[] midPos = {7f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
     private static float[] leftPos = {2.75f/8f+offsetX, 4f/8f+offsetY};
-  //  private static float[] rightPos = {7f/8f+offsetX, 4f/8f+offsetY};
+    //  private static float[] rightPos = {7f/8f+offsetX, 4f/8f+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
-
-    Color color;
-    Position position;
-    ParkingMethod parkingMethod;
-    long delay = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Hardware22(hardwareMap);
         drive = robot.drive;
         generator = robot.generator;
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -89,100 +76,27 @@ public class AutoInputTest extends LinearOpMode {
 
         telemetry.addData("Values", valLeft+"   "+valMid);
         telemetry.update();
+        Vector2d vector = new Vector2d(-32.25, 61.5);
+        Pose2d startPose = new Pose2d(vector, Math.toRadians(270));
 
-        // Color
+        drive.setPoseEstimate(startPose);
+        ArrayList<Double[]> trajectory1 = new ArrayList<>();
+        generator.generateTrajectoryListItem(-30, 47, 310, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
+        generator.generateTrajectoryListItem(-22, 36.5, PathType.LINE_TO_CONSTANT, trajectory1);
+        // Approaching to duck wheel
+        generator.generateTrajectoryListItem(-60, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory1);
+        // At duck wheel
+        generator.generateTrajectoryListItem(-60, 56.25 + 1.7, 0, PathType.LINE_TO_LINEAR, trajectory1);
 
-        telemetry.addLine("Color? x for blue, b for red");
-        telemetry.update();
 
-        while (true){
-            if (gamepad2.x) {
-                color = Color.BLUE;
-                break;
-            } else if (gamepad2.b){
-                color = Color.RED;
-                break;
-            }
-        }
-        telemetry.addLine("Color confirmed, " + color);
+        ArrayList<Double[]> trajectory2 = new ArrayList<>();
+        generator.generateTrajectoryListItem(-50, 66.7, 0, PathType.LINE_TO_LINEAR, trajectory2);
+        generator.generateTrajectoryListItem(50, 67.2, 0, PathType.LINE_TO_LINEAR, trajectory2);
 
-        // Position
+        ArrayList<Trajectory> compiled1 = generator.compileTrajectoryList(startPose, trajectory1);
+        ArrayList<Trajectory> compiled2 = generator.compileTrajectoryList(compiled1.get(compiled1.size() - 1).end(), trajectory2);
 
-        telemetry.addLine("Position? front or back, dpad up v down");
-        telemetry.update();
-
-        while (true) {
-            if (gamepad2.dpad_up) {
-                position = Position.FRONT;
-                break;
-            } else if (gamepad2.dpad_down) {
-                position = Position.BACK;
-                break;
-            }
-        }
-
-        telemetry.addLine("Position confirmed, " + position);
-        telemetry.update();
-        sleep(500);
-
-        // Parking method
-
-        telemetry.addLine("Parking method? wall or barrier, dpad right v left");
-        telemetry.update();
-
-        while (true) {
-            if (gamepad2.dpad_left) {
-                parkingMethod = ParkingMethod.BARRIER;
-                break;
-            } else if (gamepad2.dpad_right) {
-                parkingMethod = ParkingMethod.WALL;
-                break;
-            }
-        }
-
-        telemetry.addLine("Parking method confirmed, " + parkingMethod);
-        telemetry.update();
-        sleep(500);
-
-        // Delay
-
-        boolean buttonUnpressed = true;
-        while (true) {
-            telemetry.addData("Delay? RB to add 10 ms, LB to add 100ms, y done", delay);
-            telemetry.update();
-            if (gamepad2.right_bumper && buttonUnpressed) {
-                delay += 10;
-                buttonUnpressed = false;
-            } else if (gamepad2.left_bumper && buttonUnpressed) {
-                delay += 100;
-                buttonUnpressed = false;
-            } else if (gamepad2.y) {
-                break;
-            } else if (!gamepad2.right_bumper && !gamepad2.left_bumper) {
-                buttonUnpressed = true;
-            }
-        }
-        telemetry.addLine("Delay confirmed, " + delay);
-        telemetry.update();
-
-        ArrayList<ArrayList<Trajectory>> trajs;
-        TrajectoryGenerator gen;
-        if (color == Color.RED) {
-            gen = new RedTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
-        } else {
-            gen = new BlueTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
-        }
-
-        long startTime = System.nanoTime();
         waitForStart();
-
-        telemetry.addData("Color", color);
-        telemetry.addData("Position", position);
-        telemetry.addData("Delay", delay);
-        telemetry.update();
-        sleep(delay);
 
         //duck detection
 
@@ -208,41 +122,17 @@ public class AutoInputTest extends LinearOpMode {
 
         telemetry.update();
 
+//        if (isStopRequested()) return;
+        generator.executeTrajectoryList(compiled1);
 
-        telemetry.addLine("Traj 1");
-        telemetry.addData("traj length", trajs.size());
-        telemetry.update();
-        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
-        telemetry.addLine("Traj 2");
-        telemetry.update();
-        // TODO dump at correct height
-        if (position == Position.FRONT) {
-            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
-            // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
-            sleep(2000);
-            robot.towerMotor.setPower(0);
-        }
-
-        telemetry.addLine("Traj 3");
-        telemetry.update();
-        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
-
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        long durationSeconds = duration / (1*(1__0^(1_0-1))); // Future proof this number
-
-        telemetry.addData("Time Elapsed:", durationSeconds);
-        telemetry.update();
+        sleep(500);
+        robot.towerMotor.setPower(Constants.towerWheelSpeed);
         sleep(2000);
+        robot.towerMotor.setPower(0);
+        sleep(500);
+
+        generator.executeTrajectoryList(compiled2);
     }
-
-
-    /////////////////////////////////////////////////////////////////////
-
-
     class SamplePipeline extends OpenCvPipeline {
         Mat yCbCr = new Mat();
         Mat yMat = new Mat();
@@ -271,18 +161,18 @@ public class AutoInputTest extends LinearOpMode {
             double[] pixLeft = thresholdMat.get((int)(input.rows()* leftPos[1]), (int)(input.cols()* leftPos[0]));//gets value at circle
             valLeft = (int)pixLeft[0];
 
-         //   double[] pixRight = thresholdMat.get((int)(input.rows()* rightPos[1]), (int)(input.cols()* rightPos[0]));//gets value at circle
-         //   valRight = (int)pixRight[0];
+            //   double[] pixRight = thresholdMat.get((int)(input.rows()* rightPos[1]), (int)(input.cols()* rightPos[0]));//gets value at circle
+            //   valRight = (int)pixRight[0];
 
             //create three points
             Point pointMid = new Point((int)(input.cols()* midPos[0]), (int)(input.rows()* midPos[1]));
             Point pointLeft = new Point((int)(input.cols()* leftPos[0]), (int)(input.rows()* leftPos[1]));
-         //   Point pointRight = new Point((int)(input.cols()* rightPos[0]), (int)(input.rows()* rightPos[1]));
+            //   Point pointRight = new Point((int)(input.cols()* rightPos[0]), (int)(input.rows()* rightPos[1]));
 
             //draw circles on those points
             Imgproc.circle(all, pointMid,5, new Scalar( 255, 0, 0 ),1 );//draws circle
             Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
-           // Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+            // Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
             //draw 3 rectangles
             Imgproc.rectangle(//1-3

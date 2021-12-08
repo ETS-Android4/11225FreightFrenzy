@@ -94,14 +94,14 @@ public class DuckDetectorSimplified extends LinearOpMode {
 
         runtime.reset();
 
-        if (valLeft > 200) {
+        if (valLeft == 255) {
             telemetry.addData("Position", "Left");
             telemetry.update();
             // move to 0 degrees.
             servoTest.setPosition(0);
             sleep(1000);
         }
-        else if (valMid > 200) {
+        else if (valMid == 255) {
             telemetry.addData("Position", "Middle");
             telemetry.update();
             // move to 90 degrees.
@@ -109,7 +109,7 @@ public class DuckDetectorSimplified extends LinearOpMode {
             sleep(1000);
         }
 
-        else if (valRight > 200) {
+        else if (valRight == 255) {
             telemetry.addData("Position", "Right");
             telemetry.update();
             // move to 180 degrees.
@@ -124,7 +124,7 @@ public class DuckDetectorSimplified extends LinearOpMode {
 
     }
 
-    class SamplePipeline extends OpenCvPipeline
+    public class SamplePipeline extends OpenCvPipeline
     {
         Mat yCbCr = new Mat();
         Mat yMat = new Mat();
