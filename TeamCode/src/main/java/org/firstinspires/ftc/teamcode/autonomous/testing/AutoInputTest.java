@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.PathType;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ElementPosition;
 import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMethod;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Position;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -61,6 +62,7 @@ public class AutoInputTest extends LinearOpMode {
     Color color;
     Position position;
     ParkingMethod parkingMethod;
+    ElementPosition elementPosition;
     long delay = 0;
 
     @Override
@@ -78,6 +80,8 @@ public class AutoInputTest extends LinearOpMode {
         //the maximum resolution you can stream at and still get up to 30FPS is 480p (640x480).
         webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 
+//        telemetry.addData("Values", valLeft+"   "+valMid);
+//        telemetry.update();
 
         /*
         //code needed for camera to display on FTC Dashboard
@@ -87,11 +91,96 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
        */
 
-        telemetry.addData("Values", valLeft+"   "+valMid);
+        getUserInput();
+
+        ArrayList<ArrayList<Trajectory>> trajs;
+        TrajectoryGenerator gen;
+
+        if (color == Color.RED) {
+            gen = new RedTrajectoryGenerator(drive, position, parkingMethod);
+            trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
+        } else {
+            gen = new BlueTrajectoryGenerator(drive, position, parkingMethod);
+            trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
+        }
+
+        long startTime = System.nanoTime();
+        waitForStart();
+
+        telemetry.addData("Color", color);
+        telemetry.addData("Position", position);
+        telemetry.addData("Delay", delay);
+        telemetry.update();
+        sleep(delay);
+
+        determineDuckPosition();
+
+        telemetry.addLine("Traj 1");
+        telemetry.update();
+        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
+        telemetry.addLine("Traj 2");
         telemetry.update();
 
-        // Color
+        dumpPreloaded();
 
+        if (position == Position.FRONT) {
+            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
+            sleep(2000);
+            // TODO deliver duck
+            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
+            sleep(2000);
+            robot.towerMotor.setPower(0);
+        }
+
+        telemetry.addLine("Traj 3");
+        telemetry.update();
+        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        long durationSeconds = duration / (1*(1__0^(1_0-1))); // Future proof this number
+
+        telemetry.addData("Time Elapsed:", durationSeconds);
+        telemetry.update();
+
+        sleep(2000);
+    }
+
+    private void dumpPreloaded() {
+        // TODO set appropriate vals
+        if (elementPosition == ElementPosition.LEFT){
+            telemetry.addLine("Dump left");
+        } else if (elementPosition == ElementPosition.RIGHT){
+            telemetry.addLine("Dump right");
+        } else {
+            telemetry.addLine("Dump middle");
+        }
+
+        telemetry.update();
+    }
+
+    private void determineDuckPosition() {
+        //duck detection
+        if (valLeft == 255) {
+            telemetry.addData("Position", "Left");
+            telemetry.update();
+            elementPosition = ElementPosition.LEFT;
+            // sleep(1000);
+        } else if (valMid == 255) {
+            telemetry.addData("Position", "Middle");
+            telemetry.update();
+            elementPosition = ElementPosition.MIDDLE;
+//            sleep(1000);
+        } else {
+            telemetry.addData("Position", "Right");
+            telemetry.update();
+            elementPosition = ElementPosition.RIGHT;
+//            sleep(1000);
+        }
+    }
+
+    public void getUserInput() {
+        // Color
         telemetry.addLine("Color? x for blue, b for red");
         telemetry.update();
 
@@ -107,7 +196,6 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.addLine("Color confirmed, " + color);
 
         // Position
-
         telemetry.addLine("Position? front or back, dpad up v down");
         telemetry.update();
 
@@ -126,7 +214,6 @@ public class AutoInputTest extends LinearOpMode {
         sleep(500);
 
         // Parking method
-
         telemetry.addLine("Parking method? wall or barrier, dpad right v left");
         telemetry.update();
 
@@ -145,7 +232,6 @@ public class AutoInputTest extends LinearOpMode {
         sleep(500);
 
         // Delay
-
         boolean buttonUnpressed = true;
         while (true) {
             telemetry.addData("Delay? RB to add 10 ms, LB to add 100ms, y done", delay);
@@ -164,81 +250,7 @@ public class AutoInputTest extends LinearOpMode {
         }
         telemetry.addLine("Delay confirmed, " + delay);
         telemetry.update();
-
-        ArrayList<ArrayList<Trajectory>> trajs;
-        TrajectoryGenerator gen;
-        if (color == Color.RED) {
-            gen = new RedTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((RedTrajectoryGenerator) gen).generateTrajectories();
-        } else {
-            gen = new BlueTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((BlueTrajectoryGenerator) gen).generateTrajectories();
-        }
-
-        long startTime = System.nanoTime();
-        waitForStart();
-
-        telemetry.addData("Color", color);
-        telemetry.addData("Position", position);
-        telemetry.addData("Delay", delay);
-        telemetry.update();
-        sleep(delay);
-
-        //duck detection
-
-        if (valLeft == 255) {
-            telemetry.addData("Position", "Left");
-            telemetry.update();
-            //TODO add trajectories
-            sleep(1000);
-        }
-        else if (valMid == 255) {
-            telemetry.addData("Position", "Middle");
-            telemetry.update();
-            //TODO add trajectories
-            sleep(1000);
-        }
-
-        else {
-            telemetry.addData("Position", "Right");
-            telemetry.update();
-            //TODO add trajectories
-            sleep(1000);
-        }
-
-        telemetry.update();
-
-
-        telemetry.addLine("Traj 1");
-        telemetry.addData("traj length", trajs.size());
-        telemetry.update();
-        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
-        telemetry.addLine("Traj 2");
-        telemetry.update();
-        // TODO dump at correct height
-        if (position == Position.FRONT) {
-            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
-            // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
-            sleep(2000);
-            robot.towerMotor.setPower(0);
-        }
-
-        telemetry.addLine("Traj 3");
-        telemetry.update();
-        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
-
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        long durationSeconds = duration / (1*(1__0^(1_0-1))); // Future proof this number
-
-        telemetry.addData("Time Elapsed:", durationSeconds);
-        telemetry.update();
-        sleep(2000);
     }
-
 
     /////////////////////////////////////////////////////////////////////
 

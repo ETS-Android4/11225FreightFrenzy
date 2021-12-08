@@ -66,7 +66,7 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
 
             generateTrajectoryListItem(-30, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
             // moving to the shipping hub
-            generateTrajectoryListItem(-22, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
+            generateTrajectoryListItem(-13.5, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
             // getting in position to dump
 
             generateTrajectoryListItem(-60, -57, 120, PathType.LINE_TO_LINEAR, trajectory2);
