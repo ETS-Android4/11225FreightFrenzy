@@ -33,17 +33,17 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
             Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
 
             drive.setPoseEstimate(startPose);
-            // moving to the shipping hub
 
-            generateTrajectoryListItem(-7, -42, 105, PathType.LINE_TO_LINEAR, trajectory1);
+            // moving to the shipping hub
+            generateTrajectoryListItem(-7, -45, 105, PathType.LINE_TO_LINEAR, trajectory1);
             if (parkingMethod == ParkingMethod.WALL) {
+                // getting in position to cross the field and park
                 generateTrajectoryListItem(0, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
-                // getting in position to cross the field and park
-                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // hugging the wall and moving into the warehouse
+                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
             } else if (parkingMethod == ParkingMethod.BARRIER) {
-                generateTrajectoryListItem(7, -42, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // getting in position to cross the field and park
+                generateTrajectoryListItem(7, -50, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 generateTrajectoryListItem(50, -40, 0, PathType.LINE_TO_LINEAR, trajectory3);
             }
 
@@ -63,24 +63,27 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
 
             drive.setPoseEstimate(startPose);
 
-
-            generateTrajectoryListItem(-30, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
             // moving to the shipping hub
-            generateTrajectoryListItem(-13.5, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
+            generateTrajectoryListItem(-10, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
             // getting in position to dump
+            generateTrajectoryListItem(-12, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
 
-            generateTrajectoryListItem(-60, -57, 120, PathType.LINE_TO_LINEAR, trajectory2);
+            // back up to avoid duck/tse
+            generateTrajectoryListItem(-17, -50, PathType.LINE_TO_CONSTANT, trajectory2);
+
             // moving to the duck wheel
-            generateTrajectoryListItem(-63, -60, 90, PathType.LINE_TO_LINEAR, trajectory2);
+            generateTrajectoryListItem(-60, -57, 120, PathType.LINE_TO_LINEAR, trajectory2);
             //nudging up to the duck wheel
+            generateTrajectoryListItem(-63, -60, 90, PathType.LINE_TO_LINEAR, trajectory2);
+
             if (parkingMethod == ParkingMethod.WALL) {
+                // getting in position to cross the field and park
                 generateTrajectoryListItem(-50, -68.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
-                // getting in position to cross the field and park
-                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // hugging the wall and moving into the warehouse
+                generateTrajectoryListItem(50, -71.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
             } else if (parkingMethod == ParkingMethod.BARRIER) {
-                generateTrajectoryListItem(7, -42, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // getting in position to cross the field and park
+                generateTrajectoryListItem(7, -50, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 generateTrajectoryListItem(50, -40, 0, PathType.LINE_TO_LINEAR, trajectory3);
             }
 
