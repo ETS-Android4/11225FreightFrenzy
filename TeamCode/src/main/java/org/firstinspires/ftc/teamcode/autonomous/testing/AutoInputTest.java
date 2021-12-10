@@ -86,8 +86,8 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
        */
 
-        telemetry.addData("Values", valLeft+"   "+valMid);
-        telemetry.update();
+//        telemetry.addData("Values", valLeft+"   "+valMid);
+//        telemetry.update();
 
         // Color
 
@@ -196,7 +196,7 @@ public class AutoInputTest extends LinearOpMode {
         else if (valMid == 255) {
             telemetry.addData("Position", "Middle");
             telemetry.update();
-            //TODO add trajectories
+            gen.executeTrajectoryList(trajs.get(1));
             sleep(1000);
         }
 
@@ -210,21 +210,21 @@ public class AutoInputTest extends LinearOpMode {
         telemetry.update();
 
 
-        telemetry.addLine("Traj 1");
-        telemetry.update();
-        gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
+        //telemetry.addLine("Traj 1");
+        //telemetry.update();
+        //gen.executeTrajectoryList(trajs.get(0)); // going to shipping hub
         telemetry.addLine("Traj 2");
         telemetry.update();
         // TODO dump at correct height
         if (position == Position.FRONT) {
-            gen.executeTrajectoryList(trajs.get(1)); // going to duck wheel
+            gen.executeTrajectoryList(trajs.get(3)); // going to duck wheel
             sleep(2000);
             // TODO deliver duck
         }
 
         telemetry.addLine("Traj 3");
         telemetry.update();
-        gen.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
+        gen.executeTrajectoryList(trajs.get(4)); // going to park in warehouse
 
 
     }

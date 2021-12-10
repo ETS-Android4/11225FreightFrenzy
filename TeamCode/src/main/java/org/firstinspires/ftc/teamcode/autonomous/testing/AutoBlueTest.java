@@ -63,5 +63,7 @@ public class AutoBlueTest extends LinearOpMode {
         sleep(500);
 
         generator.executeTrajectoryList(compiled2);
+
     }
+
 }
