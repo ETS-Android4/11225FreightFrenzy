@@ -114,7 +114,7 @@ public class AutoInputTest extends LinearOpMode {
             generator.executeTrajectoryList(trajs.get(1)); // going to duck wheel
             sleep(2000);
             // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
+            robot.towerMotor.setPower(-Constants.towerWheelSpeed); //spinning the carasouel
             sleep(2000);
             robot.towerMotor.setPower(0);
         }
