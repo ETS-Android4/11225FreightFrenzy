@@ -46,7 +46,7 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             } else if (parkingMethod == ParkingMethod.BARRIER) {
                 // getting in position to cross the field and park
                 generateTrajectoryListItem(7, 50, 180, PathType.LINE_TO_LINEAR, trajectory3);
-                generateTrajectoryListItem(50, 40, 180, PathType.LINE_TO_LINEAR, trajectory3);
+                                                                         generateTrajectoryListItem(50, 40, 180, PathType.LINE_TO_LINEAR, trajectory3);
             }
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
@@ -73,10 +73,10 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             // back up to avoid duck/tse
             generateTrajectoryListItem(-17, 50, PathType.LINE_TO_CONSTANT, trajectory2);
 
-            // moving to the duck wheel
-            generateTrajectoryListItem(-60, 57, 210, PathType.LINE_TO_LINEAR, trajectory2);
-            //nudging up to the duck wheel
-            generateTrajectoryListItem(-63, 60, 240, PathType.LINE_TO_LINEAR, trajectory2);
+            // Approaching to duck wheel
+            generateTrajectoryListItem(-60, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory2);
+            // At duck wheel
+            generateTrajectoryListItem(-60, 56.25 + 1.7, 0, PathType.LINE_TO_LINEAR, trajectory2);
 
             if (parkingMethod == ParkingMethod.WALL) {
                 // getting in position to cross the field and park
