@@ -39,10 +39,13 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             // moving to the shipping hub
             generateTrajectoryListItem(-7, 45, 255, PathType.LINE_TO_LINEAR, trajectory1);
             if (parkingMethod == ParkingMethod.WALL) {
+                // Forward movement to avoid carossel
+                generateTrajectoryListItem(-50, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // getting in position to cross the field and park
-                generateTrajectoryListItem(0, 68.25, 180, PathType.LINE_TO_LINEAR, trajectory3);
+               generateTrajectoryListItem(-50, 68, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // hugging the wall and moving into the warehouse
-                generateTrajectoryListItem(50, 71.25, 180, PathType.LINE_TO_LINEAR, trajectory3);
+               generateTrajectoryListItem(50, 68.3, 0, PathType.LINE_TO_LINEAR, trajectory3);
+
             } else if (parkingMethod == ParkingMethod.BARRIER) {
                 // getting in position to cross the field and park
                 generateTrajectoryListItem(7, 50, 180, PathType.LINE_TO_LINEAR, trajectory3);
@@ -79,10 +82,12 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             generateTrajectoryListItem(-60, 56.25 + 1.7, 0, PathType.LINE_TO_LINEAR, trajectory2);
 
             if (parkingMethod == ParkingMethod.WALL) {
+                // Forward movement to avoid carossel
+                generateTrajectoryListItem(-50, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // getting in position to cross the field and park
-                generateTrajectoryListItem(-50, 68.25, 180, PathType.LINE_TO_LINEAR, trajectory3);
+                generateTrajectoryListItem(-50, 68, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // hugging the wall and moving into the warehouse
-                generateTrajectoryListItem(50, 71.25, 180, PathType.LINE_TO_LINEAR, trajectory3);
+                generateTrajectoryListItem(50, 68.3, 0, PathType.LINE_TO_LINEAR, trajectory3);
             } else if (parkingMethod == ParkingMethod.BARRIER) {
                 // getting in position to cross the field and park
                 generateTrajectoryListItem(7, 50, 180, PathType.LINE_TO_LINEAR, trajectory3);

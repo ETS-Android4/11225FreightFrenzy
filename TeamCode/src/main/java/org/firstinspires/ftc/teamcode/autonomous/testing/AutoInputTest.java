@@ -85,6 +85,7 @@ public class AutoInputTest extends LinearOpMode {
         ArrayList<ArrayList<Trajectory>> trajs;
 
         if (color == Color.RED) {
+            Constants.towerWheelSpeed=-Constants.towerWheelSpeed;
             generator = new RedTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((RedTrajectoryGenerator) generator).generateTrajectories();
         } else {
@@ -114,9 +115,9 @@ public class AutoInputTest extends LinearOpMode {
 
         if (position == Position.FRONT) {
             generator.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
+            sleep(300);
             // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
+            robot.towerMotor.setPower(Constants.towerWheelSpeed);
             sleep(2000);
             robot.towerMotor.setPower(0);
         }
