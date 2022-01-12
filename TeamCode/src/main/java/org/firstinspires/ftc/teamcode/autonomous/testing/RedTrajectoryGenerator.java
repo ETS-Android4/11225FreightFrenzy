@@ -64,9 +64,9 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
             drive.setPoseEstimate(startPose);
 
             // moving to the shipping hub
-            generateTrajectoryListItem(-10, -47, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
+            generateTrajectoryListItem(-10, -57, 50, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
             // getting in position to dump
-            generateTrajectoryListItem(-12, -36.5, PathType.LINE_TO_CONSTANT, trajectory1);
+            generateTrajectoryListItem(-12, -46.5, PathType.LINE_TO_CONSTANT, trajectory1);
 
             // back up to avoid duck/tse
             generateTrajectoryListItem(-17, -50, PathType.LINE_TO_CONSTANT, trajectory2);

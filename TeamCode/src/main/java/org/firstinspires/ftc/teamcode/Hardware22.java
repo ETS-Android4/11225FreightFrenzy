@@ -76,6 +76,7 @@ public class Hardware22 {
     public WebcamName logitechWebcam = null;
     public DcMotor towerMotor = null;
     public Servo dumpServo = null;
+    public Servo tseServo = null;
     public DcMotor collectionMotor = null;
     public DcMotor liftMotor = null;
 
@@ -144,6 +145,11 @@ public class Hardware22 {
 
         try {
             dumpServo = hardwareMap.servo.get("servo_dump");
+        } catch (Exception ignored) {
+        }
+
+        try {
+            tseServo = hardwareMap.servo.get("tse_servo");
         } catch (Exception ignored) {
         }
 

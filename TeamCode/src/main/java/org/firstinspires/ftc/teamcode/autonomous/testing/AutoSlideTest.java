@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Hardware22;
 import org.firstinspires.ftc.teamcode.autonomous.enums.Color;
 import org.firstinspires.ftc.teamcode.autonomous.enums.ElementPosition;
@@ -23,20 +20,10 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import java.util.ArrayList;
-
-/*
- * This is an example of a more complex path to really test the tuning.
- */
-//@Disabled
-@Autonomous(group = "drive")
-public class AutoInputTest extends LinearOpMode {
-    private final ElapsedTime runtime = new ElapsedTime();
-
-    //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
+@Autonomous
+public class AutoSlideTest extends LinearOpMode {
     private static int valMid = -1;
     private static int valLeft = -1;
 //    private static int valRight = -1;
@@ -60,6 +47,7 @@ public class AutoInputTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         robot = new Hardware22(hardwareMap);
         SampleMecanumDrive drive = robot.drive;
         TrajectoryGenerator generator;
@@ -70,110 +58,14 @@ public class AutoInputTest extends LinearOpMode {
         webcam.openCameraDevice();
         webcam.setPipeline(new SamplePipeline());
 
-
-        robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        liftEncoderStart = robot.liftMotor.getCurrentPosition();
-
-        robot.dumpServo.setPosition(Constants.collectPosition);
-
-        //the maximum resolution you can stream at and still get up to 30FPS is 480p (640x480).
-        // If this line is uncommented you will not recieve telemetry
-        // webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-
-//        telemetry.addData("Values", valLeft+"   "+valMid);
-//        telemetry.update();
-
-
-        //code needed for camera to display on FTC Dashboard
         FtcDashboard dashboard = FtcDashboard.getInstance();
         this.telemetry = dashboard.getTelemetry();
         telemetry = dashboard.getTelemetry();
-        //FtcDashboard.getInstance().startCameraStream(webcam, 10);
-        //telemetry.update();
-
-
-        getUserInput();
-
-        ArrayList<ArrayList<Trajectory>> trajs;
-
-        if (color == Color.RED) {
-            generator = new RedTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((RedTrajectoryGenerator) generator).generateTrajectories();
-        } else {
-            generator = new BlueTrajectoryGenerator(drive, position, parkingMethod);
-            trajs = ((BlueTrajectoryGenerator) generator).generateTrajectories();
-        }
 
         waitForStart();
-        long startTime = System.nanoTime();
-
-        telemetry.addData("Color", color);
-        telemetry.addData("Position", position);
-        telemetry.addData("Delay", delay);
-        telemetry.update();
-        sleep(delay);
-
         determineDuckPosition();
 
-        telemetry.addLine("Traj 1");
-        telemetry.update();
-        generator.executeTrajectoryList(trajs.get(0)); // going to shipping hub
-        telemetry.addLine("Traj 2");
-        telemetry.update();
-
         dumpPreloaded();
-
-        if (position == Position.FRONT) {
-            generator.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
-            // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
-            sleep(2000);
-            robot.towerMotor.setPower(0);
-        }
-
-        telemetry.addLine("Traj 3");
-        telemetry.update();
-        generator.executeTrajectoryList(trajs.get(2)); // going to park in warehouse
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        long durationSeconds = duration / (1_000_000_000); // Future proof this number
-
-        telemetry.addData("Time Elapsed:", durationSeconds);
-        telemetry.update();
-
-        sleep(2000);
-    }
-
-    private void dumpPreloaded() {
-        // TODO set appropriate vals
-        // Encoder Counts, Bottom: 1100
-        // Middle 2120
-        // Top 3470
-        int encTarget;
-        if (elementPosition == ElementPosition.LEFT) {
-            encTarget = 1100 + liftEncoderStart;
-            telemetry.addLine("Dump bottom");
-        } else if (elementPosition == ElementPosition.RIGHT) {
-            encTarget = 2120 + liftEncoderStart;
-            telemetry.addLine("Dump top");
-        } else {
-            encTarget = 3470 + liftEncoderStart;
-            telemetry.addLine("Dump middle");
-        }
-        telemetry.update();
-
-        robot.liftMotor.setTargetPosition(encTarget);
-        robot.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.liftMotor.setPower(.5);
-        while (opModeIsActive() && robot.liftMotor.isBusy()) {}
-
-        robot.liftMotor.setPower(0);
-        robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private void determineDuckPosition() {
@@ -187,88 +79,42 @@ public class AutoInputTest extends LinearOpMode {
             telemetry.addData("Position", "Middle");
             telemetry.update();
             elementPosition = ElementPosition.MIDDLE;
-//            sleep(1000);
+            //            sleep(1000);
         } else {
             telemetry.addData("Position", "Right");
             telemetry.update();
             elementPosition = ElementPosition.RIGHT;
-//            sleep(1000);
+            //            sleep(1000);
         }
     }
 
-    public void getUserInput() {
-        // Color
-        telemetry.addLine("Color? x for blue, b for red");
-        telemetry.update();
-
-        while (true) {
-            if (gamepad2.x) {
-                color = Color.BLUE;
-                break;
-            } else if (gamepad2.b) {
-                color = Color.RED;
-                break;
-            }
+    private void dumpPreloaded() {
+        // TODO set appropriate vals
+        // Encoder Counts, Bottom: 1100
+        // Middle 2120
+        // Top 3470
+        int encTarget;
+        if (elementPosition == ElementPosition.LEFT) {
+            encTarget = 1100 + liftEncoderStart;
+            telemetry.addLine("Dump bottom");
+        } else if (elementPosition == ElementPosition.RIGHT) {
+            encTarget = 3470 + liftEncoderStart;
+            telemetry.addLine("Dump top");
+        } else {
+            encTarget = 2120 + liftEncoderStart;
+            telemetry.addLine("Dump middle");
         }
-        telemetry.addLine("Color confirmed, " + color);
-
-        // Position
-        telemetry.addLine("Position? front or back, dpad up v down");
         telemetry.update();
 
-        while (true) {
-            if (gamepad2.dpad_up) {
-                position = Position.FRONT;
-                break;
-            } else if (gamepad2.dpad_down) {
-                position = Position.BACK;
-                break;
-            }
+        robot.liftMotor.setTargetPosition(encTarget);
+        robot.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.liftMotor.setPower(.5);
+        while (opModeIsActive() && robot.liftMotor.isBusy()) {
         }
 
-        telemetry.addLine("Position confirmed, " + position);
-        telemetry.update();
-        sleep(500);
-
-        // Parking method
-        telemetry.addLine("Parking method? wall or barrier, dpad right v left");
-        telemetry.update();
-
-        while (true) {
-            if (gamepad2.dpad_left) {
-                parkingMethod = ParkingMethod.BARRIER;
-                break;
-            } else if (gamepad2.dpad_right) {
-                parkingMethod = ParkingMethod.WALL;
-                break;
-            }
-        }
-
-        telemetry.addLine("Parking method confirmed, " + parkingMethod);
-        telemetry.update();
-        sleep(500);
-
-        // Delay
-        boolean buttonUnpressed = true;
-        while (true) {
-            telemetry.addData("Delay? RB to add 10 ms, LB to add 100ms, y done", delay);
-            telemetry.update();
-            if (gamepad2.right_bumper && buttonUnpressed) {
-                delay += 10;
-                buttonUnpressed = false;
-            } else if (gamepad2.left_bumper && buttonUnpressed) {
-                delay += 100;
-                buttonUnpressed = false;
-            } else if (gamepad2.y) {
-                break;
-            } else if (!gamepad2.right_bumper && !gamepad2.left_bumper) {
-                buttonUnpressed = true;
-            }
-        }
-        telemetry.addLine("Delay confirmed, " + delay);
-        telemetry.update();
+        robot.liftMotor.setPower(0);
+        robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
 
     static class SamplePipeline extends OpenCvPipeline {
         Mat yCbCr = new Mat();
@@ -331,15 +177,15 @@ public class AutoInputTest extends LinearOpMode {
                             input.cols() * (midPos[0] + rectWidth / 2),
                             input.rows() * (midPos[1] + rectHeight / 2)),
                     new Scalar(0, 255, 0), 3);
-         /*   Imgproc.rectangle(//5-7
-                    all,
-                    new Point(
-                            input.cols()*(rightPos[0]-rectWidth/2),
-                            input.rows()*(rightPos[1]-rectHeight/2)),
-                    new Point(
-                            input.cols()*(rightPos[0]+rectWidth/2),
-                            input.rows()*(rightPos[1]+rectHeight/2)),
-                    new Scalar(0, 255, 0), 3); */
+             /*   Imgproc.rectangle(//5-7
+                        all,
+                        new Point(
+                                input.cols()*(rightPos[0]-rectWidth/2),
+                                input.rows()*(rightPos[1]-rectHeight/2)),
+                        new Point(
+                                input.cols()*(rightPos[0]+rectWidth/2),
+                                input.rows()*(rightPos[1]+rectHeight/2)),
+                        new Scalar(0, 255, 0), 3); */
 
 
             // return input; // this is the line that declares which image is returned to the viewport (DS)
