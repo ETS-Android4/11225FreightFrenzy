@@ -76,6 +76,7 @@ public class Hardware22 {
     public WebcamName logitechWebcam = null;
     public DcMotor towerMotor = null;
     public Servo dumpServo = null;
+    public Servo tseServo = null;
     public DcMotor collectionMotor = null;
     public DcMotor liftMotor = null;
 
@@ -148,6 +149,11 @@ public class Hardware22 {
         }
 
         try {
+            tseServo = hardwareMap.servo.get("tse_servo");
+        } catch (Exception ignored) {
+        }
+
+        try {
             collectionMotor = hardwareMap.dcMotor.get("collection_motor");
         } catch (Exception ignored) {
         }
@@ -157,8 +163,17 @@ public class Hardware22 {
         } catch (Exception ignored) {
         }
 
-        drive = new SampleMecanumDrive(hardwareMap);
-        generator = new TrajectoryGenerator(drive);
+        try {
+            drive = new SampleMecanumDrive(hardwareMap);
+        } catch (Exception ignored) {
+        }
+
+        try {
+            generator = new TrajectoryGenerator(drive);
+        } catch (Exception ignored) {
+        }
+
+
 
 //        frontLeft = hwMap.dcMotor.get("front_left");
 //        frontRight = hwMap.dcMotor.get("front_right");
