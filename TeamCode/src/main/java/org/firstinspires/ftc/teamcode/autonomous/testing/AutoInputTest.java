@@ -118,7 +118,7 @@ public class AutoInputTest extends LinearOpMode {
             sleep(300);
             // TODO deliver duck
             robot.towerMotor.setPower(Constants.towerWheelSpeed);
-            sleep(2000);
+            sleep(2500);
             robot.towerMotor.setPower(0);
         }
 

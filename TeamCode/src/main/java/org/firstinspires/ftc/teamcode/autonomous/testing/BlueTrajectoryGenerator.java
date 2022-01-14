@@ -79,19 +79,20 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             // Approaching to duck wheel
             generateTrajectoryListItem(-60, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory2);
             // At duck wheel
-            generateTrajectoryListItem(-60, 56.25 + 1.7, 0, PathType.LINE_TO_LINEAR, trajectory2);
+            generateTrajectoryListItem(-60, 56.25 + 2.2, 0, PathType.LINE_TO_LINEAR, trajectory2);
 
             if (parkingMethod == ParkingMethod.WALL) {
                 // Forward movement to avoid carossel
-                generateTrajectoryListItem(-50, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                generateTrajectoryListItem(-40, 56.25, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // getting in position to cross the field and park
-                generateTrajectoryListItem(-50, 68, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                generateTrajectoryListItem(-40, 68, 0, PathType.LINE_TO_LINEAR, trajectory3);
                 // hugging the wall and moving into the warehouse
-                generateTrajectoryListItem(50, 68.3, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                generateTrajectoryListItem(50, 72, 0, PathType.LINE_TO_LINEAR, trajectory3);
             } else if (parkingMethod == ParkingMethod.BARRIER) {
-                // getting in position to cross the field and park
-                generateTrajectoryListItem(7, 50, 180, PathType.LINE_TO_LINEAR, trajectory3);
-                generateTrajectoryListItem(50, 40, 180, PathType.LINE_TO_LINEAR, trajectory3);
+                // Forward movement to avoid carossel
+                generateTrajectoryListItem(-50, 48, 0, PathType.LINE_TO_LINEAR, trajectory3);
+                // Forward move to warehouse over barrier
+                generateTrajectoryListItem(50, 48, 0, PathType.LINE_TO_LINEAR, trajectory3);
             }
 
             ArrayList<Trajectory> compTraj1 = compileTrajectoryList(startPose, trajectory1);
