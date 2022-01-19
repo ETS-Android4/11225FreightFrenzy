@@ -69,7 +69,8 @@ public class BlueTrajectoryGenerator extends TrajectoryGenerator {
             drive.setPoseEstimate(startPose);
 
             // moving to the shipping hub
-            generateTrajectoryListItem(-10, 47, 310, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
+            generateTrajectoryListItem(-57, 38, 270, 0, PathType.LINE_TO_LINEAR, trajectory1);
+            generateTrajectoryListItem(-30, 24, 90, 0, PathType.SPLINE_TO_LINEAR, trajectory1);
             // getting in position to dump
             generateTrajectoryListItem(-12, 36.5, PathType.LINE_TO_CONSTANT, trajectory1);
 
