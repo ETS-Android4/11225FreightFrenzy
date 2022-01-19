@@ -67,9 +67,6 @@ public class TeleopTestServo extends LinearOpMode {
     Boolean xButtonPress = false;
     Boolean servoPosition = false;
 
-
-
-
     @Override
     public void runOpMode() {
         tseArmServo=hardwareMap.servo.get("tse_arm_servo");
