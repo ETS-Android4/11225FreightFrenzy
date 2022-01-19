@@ -2,6 +2,10 @@
 ## Gamepad 1
 * Left stick: movement
 * Right stick (x): turning
+* Left bumper: fast mode
+* Right bumper: slow mode
+* A: TSE Rod Servo
+* Y: TSE Arm Servo
 
 ## Gamepad 2
 * Dpad up: Lift collection bucket

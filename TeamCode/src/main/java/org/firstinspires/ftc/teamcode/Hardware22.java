@@ -43,31 +43,13 @@ import org.firstinspires.ftc.teamcode.autonomous.testing.TrajectoryGenerator;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 /**
- * This is NOT an opmode.
- * <p>
- * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- * <p>
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
- * <p>
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
+ * PLEASE follow these instructions when adding new hardware:
+ * IF you are TESTING, please wrap any and all calls to the hardware map in a try-catch block,
+ * IGNORING any errors. This prevents robot failiure if some hardware is disconnected.
+ * REMOVE THE TRY CATCH BLOCKS BEFORE COMPETITION.
+ * ENSURE each INDIVIDUAL CALL to the hardware map is in its OWN try-catch block.
  */
-
 public class Hardware22 {
-
-//    private Telemetry telemetry;
-//    public void init(Telemetry telemetry) {
-//        this.telemetry = telemetry;
-//    }
-
-
-    /* Public OpMode members. */
 
     public DcMotor rearLeft = null;
     public DcMotor rearRight = null;
@@ -76,25 +58,18 @@ public class Hardware22 {
     public WebcamName logitechWebcam = null;
     public DcMotor towerMotor = null;
     public Servo dumpServo = null;
-    public Servo tseServo = null;
+    public Servo tseRodServo = null;
+    public Servo tseArmServo = null;
     public DcMotor collectionMotor = null;
     public DcMotor liftMotor = null;
 
 
-    //public com.qualcomm.robotcore.hardware.GyroSensor GyroSensor;
-    //public ModernRoboticsI2cGyro   gyro;
-    //public ColorSensor colorSensor;    // Hardware Device Object
-
-
-    // The IMU sensor object
     private BNO055IMU imu;
 
     // State used for updating telemetry
     private Orientation angles;
     private Acceleration gravity;
 
-
-    /* local OpMode members. */
     private final HardwareMap hwMap = null;
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -103,7 +78,6 @@ public class Hardware22 {
     public TrajectoryGenerator generator;
 
 
-    /* Constructor */
     public Hardware22(HardwareMap hardwareMap) {
         // Define and initialize motors
         // NEVER DO THIS
@@ -149,9 +123,15 @@ public class Hardware22 {
         }
 
         try {
-            tseServo = hardwareMap.servo.get("tse_servo");
+            tseRodServo = hardwareMap.servo.get("tse_rod_servo");
         } catch (Exception ignored) {
         }
+
+        try {
+            tseArmServo = hardwareMap.servo.get("tse_arm_servo");
+        } catch (Exception ignored) {
+        }
+
 
         try {
             collectionMotor = hardwareMap.dcMotor.get("collection_motor");
@@ -172,27 +152,6 @@ public class Hardware22 {
             generator = new TrajectoryGenerator(drive);
         } catch (Exception ignored) {
         }
-
-
-
-//        frontLeft = hwMap.dcMotor.get("front_left");
-//        frontRight = hwMap.dcMotor.get("front_right");
-//        rearRight = hwMap.dcMotor.get("rear_right");
-//        logitechWebcam = hwMap.get(WebcamName .class, "Webcam 1");
-//        towerMotor = hwMap.dcMotor.get ("tower_motor");
-//        dumpServo = hwMap.servo.get("servo_dump");
-//        collectionMotor = hwMap.dcMotor.get("collection_motor");
-//        liftMotor = hwMap.dcMotor.get("lift_motor");
-
-//            frontLeft.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-//            frontRight.setDirection(DcMotor.Direction.REVERSE);
-//            rearLeft.setDirection(DcMotor.Direction.FORWARD);
-//            rearRight.setDirection(DcMotor.Direction.REVERSE);
-
-        //GyroSensor = hwMap.gyroSensor.get("gyro");
-        //colorSensor = hwMap.get(ColorSensor.class, "sensor_color");
-        //towerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 }
 

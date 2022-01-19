@@ -2,15 +2,18 @@ package org.firstinspires.ftc.teamcode.teleop.testing;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-/*
-This class handles control dispatching. Simply access any of these variables to get the
-status of that action's corresponding control.
-DO NOT instantiate this class. ALL VARIABLES ARE STATIC.
-AT THE BEGINNING of the teleop loop call this line of code: ControlConfig.update(gamepad1, gamepad2);
-IF YOU DON'T DO THIS THE CONTROLS WILL NOT BE REFRESHED.
-Follow given controls to add extra actions.
- */
-public final class ControlConfig {
+/**
+* This class handles control dispatching. Simply access any of these variables to get the
+* status of that action's corresponding control.
+* DO NOT instantiate this class. It won't let you. All needed variables and methods are static.
+* Also do not INHERIT FROM this class.
+* AT THE BEGINNING of the teleop loop call this line of code: ControlConfig.update(gamepad1, gamepad2);
+* IF YOU DON'T DO THIS THE CONTROLS WILL NOT BE REFRESHED.
+* To add an extra action:
+* * Define a public static class variable with the appropriate data type
+* * In the update method, assign to the class variable the appropriate data
+*/
+public abstract class ControlConfig {
     // Movement
     public static double forward;
     public static double backward;
@@ -34,9 +37,8 @@ public final class ControlConfig {
     public static boolean dumpServo;
     public static boolean collectServo;
 
-    public ControlConfig() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("I told you not to instantiate this. READ THE COMMENT");
-    }
+    public static boolean tseRodServo;
+    public static boolean tseArmServo;
 
     public static void update(Gamepad pad1, Gamepad pad2) {
         // Update movement controls;
@@ -61,5 +63,9 @@ public final class ControlConfig {
 
         dumpServo = pad2.y;
         collectServo = pad2.a;
+        
+        tseRodServo = pad1.a;
+        tseArmServo = pad1.y;
+        
     }
 }
