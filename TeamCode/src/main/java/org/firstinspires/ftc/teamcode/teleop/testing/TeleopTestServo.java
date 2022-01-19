@@ -13,11 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Hardware22;
 
 import java.util.Locale;
-
-import static org.firstinspires.ftc.teamcode.Constants.dumpPosition;
-import static org.firstinspires.ftc.teamcode.Constants.tseArmDumpPosition;
 
 @TeleOp(name="TeleOp test servo")
 //@Disabled
@@ -30,10 +28,6 @@ public class TeleopTestServo extends LinearOpMode {
     Acceleration gravity;
 
     private ElapsedTime runtime = new ElapsedTime();
-
-    Servo tseArmServo = null;
-    Servo tseRodServo = null;
-
 
     double frontLeft;
     double rearLeft;
@@ -69,12 +63,18 @@ public class TeleopTestServo extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        tseArmServo=hardwareMap.servo.get("tse_arm_servo");
+        Hardware22 robot = null;
+        try {
+            robot = new Hardware22(hardwareMap);
+        } catch (Exception e) {
+            telemetry.addLine(e.getMessage());
+            telemetry.addData("Line num", e.getStackTrace()[0].getLineNumber());
+            telemetry.update();
+            sleep(10000);
+        }
 
-        tseRodServo=hardwareMap.servo.get("tse_rod_servo");
-
-        tseArmServo.setPosition(Constants.tseArmCollectPosition);
-        tseRodServo.setPosition(Constants.tseRodCollectPosition);
+        robot.tseArmServo.setPosition(Constants.tseArmInitPosition);
+        robot.tseRodServo.setPosition(Constants.tseRodInitPosition);
 
         waitForStart();
         // run until the end of the match (driver presses STOP)
@@ -82,10 +82,10 @@ public class TeleopTestServo extends LinearOpMode {
             ControlConfig.update(gamepad1, gamepad2);
 
             if (ControlConfig.tseArmServo) {
-                tseArmServo.setPosition(Constants.tseArmDumpPosition);
+                robot.tseArmServo.setPosition(Constants.tseArmActivePosition);
             }
             if (ControlConfig.tseRodServo) {
-                tseRodServo.setPosition(Constants.tseRodDumpPosition);
+                robot.tseRodServo.setPosition(Constants.tseRodActivePosition);
             }
         }
     }

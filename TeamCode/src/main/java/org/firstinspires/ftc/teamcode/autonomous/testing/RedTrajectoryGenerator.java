@@ -58,6 +58,7 @@ public class RedTrajectoryGenerator extends TrajectoryGenerator {
 
 
         } else if (position == Position.FRONT) {
+            // TODO for traj 1 in the front, make it so it goes around ducks to approach shipping hub
             Vector2d vector = new Vector2d(-38.625, -61.5);
             Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
 

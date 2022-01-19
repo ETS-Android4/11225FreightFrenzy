@@ -10,11 +10,11 @@ public abstract class Constants {
     public final static double dumpPosition = 0.0;
     public final static double collectPosition = 0.65;
 
-    public final static double tseArmCollectPosition = 1.0;
-    public final static double tseArmDumpPosition = 0.65;
+    public final static double tseArmInitPosition = 0.08;
+    public final static double tseArmActivePosition = 0.46;
 
-    public final static double tseRodCollectPosition = 1.0;
-    public final static double tseRodDumpPosition = 0.65;
+    public final static double tseRodInitPosition = 0.0;
+    public final static double tseRodActivePosition = 0.45;
 
     public final static double fastMultiplier = 1.0;
     public final static double normalMultiplier = 0.6;
