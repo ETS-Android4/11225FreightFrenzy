@@ -86,20 +86,21 @@ public class AutoInputTest extends LinearOpMode {
 //        telemetry.addData("Values", valLeft+"   "+valMid);
 //        telemetry.update();
 
-
+        /*
         //code needed for camera to display on FTC Dashboard
         FtcDashboard dashboard = FtcDashboard.getInstance();
         this.telemetry = dashboard.getTelemetry();
         telemetry = dashboard.getTelemetry();
-        //FtcDashboard.getInstance().startCameraStream(webcam, 10);
-        //telemetry.update();
-
+        FtcDashboard.getInstance().startCameraStream(webcam, 10);
+        telemetry.update();
+       */
 
         getUserInput();
 
         ArrayList<ArrayList<Trajectory>> trajs;
 
         if (color == Color.RED) {
+            Constants.towerWheelSpeed=-Constants.towerWheelSpeed;
             generator = new RedTrajectoryGenerator(drive, position, parkingMethod);
             trajs = ((RedTrajectoryGenerator) generator).generateTrajectories();
         } else {
@@ -128,10 +129,10 @@ public class AutoInputTest extends LinearOpMode {
 
         if (position == Position.FRONT) {
             generator.executeTrajectoryList(trajs.get(1)); // going to duck wheel
-            sleep(2000);
+            sleep(300);
             // TODO deliver duck
-            robot.towerMotor.setPower(-Constants.towerWheelSpeed);
-            sleep(2000);
+            robot.towerMotor.setPower(Constants.towerWheelSpeed);
+            sleep(2500);
             robot.towerMotor.setPower(0);
         }
 
@@ -165,6 +166,7 @@ public class AutoInputTest extends LinearOpMode {
             encTarget = 3470 + liftEncoderStart;
             telemetry.addLine("Dump middle");
         }
+
         telemetry.update();
 
         robot.liftMotor.setTargetPosition(encTarget);

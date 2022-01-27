@@ -5,5 +5,5 @@ public class Constants {
     public static double collectPosition = 0.65;
 
     // TODO tune this speed, may be .7
-    public static double towerWheelSpeed = .67;
+    public static double towerWheelSpeed = .5;
 }
