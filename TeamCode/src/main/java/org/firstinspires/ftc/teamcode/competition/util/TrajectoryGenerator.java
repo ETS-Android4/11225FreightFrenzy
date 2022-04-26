@@ -69,7 +69,7 @@ public class TrajectoryGenerator {
     // TODO this should not be used in favor of compileTrajectory as that one uses proper standards
     // TODO and is faster.
     // TODO remove all references to this method and replace with compileTrajectory
-//     @Deprecated
+    @Deprecated
     public ArrayList<Trajectory> compileTrajectoryList(Pose2d start, ArrayList<Double[]> arr) {
         ArrayList<Trajectory> compiled = new ArrayList<>();
         Pose2d previous = start;
@@ -113,7 +113,7 @@ public class TrajectoryGenerator {
                     builder.lineToLinearHeading(new Pose2d(item[0], item[1], Math.toRadians(item[2])));
                     break;
                 case SPLINE_TO_LINEAR:
-                    builder.splineToLinearHeading(new Pose2d(item[0], item[1], Math.toRadians(item[2])), Math.toRadians(item[3]));
+                    builder.splineTo(new Vector2d(item[0], item[1]), Math.toRadians(item[3]));
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + type);
