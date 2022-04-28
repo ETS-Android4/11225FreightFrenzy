@@ -21,18 +21,17 @@ public class TrajTest extends LinearOpMode {
       SampleMecanumDrive drive = robot.drive;
 
       // Sets current pos of robot
-      drive.setPoseEstimate(new Pose2d(-32.25, 61.5, Math.toRadians(270))); // This line is important
+      Vector2d vector = new Vector2d(13, -38);
+      Pose2d startPose = new Pose2d(vector, Math.toRadians(270));
+      drive.setPoseEstimate(startPose); // This line is important
 
       waitForStart();
 //
-//      Vector2d vector = new Vector2d(-32.25, 61.5);
-//      Pose2d startPose = new Pose2d(vector, Math.toRadians(270));
       /*-32.25, 61.5, Math.toRadians(0)*/
-      Trajectory traj = drive.trajectoryBuilder(new Pose2d(-32.25, 61.5, Math.toRadians(270)), false)
-              // TODO try to make it so that it only splines corners
-              .splineTo(new Vector2d(-56, 37), Math.toRadians(270))
-              .splineTo(new Vector2d(-23, 25), 0)
+      Trajectory traj = drive.trajectoryBuilder(startPose)
+              .splineTo(new Vector2d(32, -21), 0)
               .build();
+
       drive.followTrajectory(traj);
    }
 }
