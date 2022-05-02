@@ -25,23 +25,29 @@ public class TrajTest extends LinearOpMode {
 
         // Sets current pos of robot
         Vector2d vector = new Vector2d(-11.6, 42);
-        Pose2d startPose = new Pose2d(vector, Math.toRadians(-270));
+        Pose2d startPose = new Pose2d(vector, Math.toRadians(90));
         drive.setPoseEstimate(startPose); // This line is important
 
         waitForStart();
 //
         /*-32.25, 61.5, Math.toRadians(0)*/
         TrajectorySequence traj = drive.trajectorySequenceBuilder(startPose)
-                .splineToSplineHeading(new Pose2d(14, 63.5, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(14, 63.5, Math.toRadians(180)), Math.toRadians(0)).setReversed(true)
                 .lineTo(new Vector2d(54, 63.5))
+                .addDisplacementMarker(() -> {
+                    robot.collectionMotor.setPower(-1);
+                })
                 .lineTo(new Vector2d(14, 63.5))
-                .splineToSplineHeading(startPose, Math.toRadians(270))
-                .addTemporalMarker(2, () -> {
-                    robot.liftMotor.setPower(0.5);
+                .addDisplacementMarker(() -> {
+                    robot.collectionMotor.setPower(0);
                 })
-                .addTemporalMarker(3, () -> {
-                    robot.liftMotor.setPower(0);
-                })
+                .splineToSplineHeading(new Pose2d (-11.6, 42, Math.toRadians(270)), Math.toRadians(270))
+//                .addTemporalMarker(2, () -> {
+//                    robot.liftMotor.setPower(0.5);
+//                })
+//                .addTemporalMarker(3, () -> {
+//                    robot.liftMotor.setPower(0);
+//                })
 //                                    .splineToSplineHeading(new Pose2d(57.5, 63.5, Math.toRadians(0)), 0)
 
 //                                    .splineToLinearHeading(new Pose2d(22.7, 62.9, Math.toRadians(0)), Math.toRadians(-180))
